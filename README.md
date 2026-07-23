@@ -4,7 +4,7 @@ A RAG evaluation dashboard that measures retrieval and generation quality using 
 
 Most RAG demos just show that the system can produce an answer. This one measures whether that answer is actually good — and explains where the pipeline is failing.
 
-**Live demo:** [rag-bench.streamlit.app](https://rag-bench.streamlit.app)
+**Live demo:** [rag-bench-byabbasaamir1.streamlit.app](https://rag-bench-byabbasaamir1.streamlit.app)
 
 ---
 
