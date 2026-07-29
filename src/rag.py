@@ -4,44 +4,9 @@ import chromadb
 from dotenv import load_dotenv
 from knowledge_base import DOCUMENTS
 
+from providers import EMBED_MODEL, call_llm, embed_text
+
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-
-def embed_text(text: str) -> list[float]:
-    url = (
-        "https://generativelanguage.googleapis.com"
-        f"/v1beta/models/gemini-embedding-2:embedContent?key={GEMINI_API_KEY}"
-    )
-    r = requests.post(
-        url,
-        json={"content": {"parts": [{"text": text}]}},
-        timeout=15,
-    )
-    r.raise_for_status()
-    return r.json()["embedding"]["values"]
-
-
-def call_gemini(prompt: str) -> str:
-    models = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"]
-    for model in models:
-        url = (
-            "https://generativelanguage.googleapis.com"
-            f"/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
-        )
-        try:
-            r = requests.post(
-                url,
-                json={"contents": [{"role": "user", "parts": [{"text": prompt}]}]},
-                timeout=60,
-            )
-        except requests.exceptions.Timeout:
-            continue
-        if r.status_code in (503, 429):
-            continue
-        r.raise_for_status()
-        return r.json()["candidates"][0]["content"]["parts"][0]["text"]
-    raise RuntimeError("All Gemini models temporarily unavailable.")
 
 
 def build_index() -> chromadb.Collection:
@@ -90,4 +55,4 @@ Context:
 Question: {question}
 
 Answer:"""
-    return call_gemini(prompt)
+    return call_llm(prompt)

@@ -3,30 +3,9 @@ import json
 import requests
 from dotenv import load_dotenv
 
+from providers import EMBED_MODEL, call_llm, embed_text
+
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-
-
-def call_gemini(prompt: str) -> str:
-    models = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest"]
-    for model in models:
-        url = (
-            "https://generativelanguage.googleapis.com"
-            f"/v1beta/models/{model}:generateContent?key={GEMINI_API_KEY}"
-        )
-        try:
-            r = requests.post(
-                url,
-                json={"contents": [{"role": "user", "parts": [{"text": prompt}]}]},
-                timeout=60,
-            )
-        except requests.exceptions.Timeout:
-            continue
-        if r.status_code in (503, 429):
-            continue
-        r.raise_for_status()
-        return r.json()["candidates"][0]["content"]["parts"][0]["text"]
-    raise RuntimeError("All Gemini models temporarily unavailable.")
 
 
 def parse_score(raw: str) -> float:
@@ -52,7 +31,7 @@ Answer:
 {answer}
 
 Respond with ONLY this JSON: {{"score": <number between 0 and 1>}}"""
-    return parse_score(call_gemini(prompt))
+    return parse_score(call_llm(prompt))
 
 
 def answer_relevancy(question: str, answer: str) -> float:
@@ -69,7 +48,7 @@ Answer:
 {answer}
 
 Respond with ONLY this JSON: {{"score": <number between 0 and 1>}}"""
-    return parse_score(call_gemini(prompt))
+    return parse_score(call_llm(prompt))
 
 
 def context_precision(question: str, chunks: list[dict]) -> float:
@@ -87,7 +66,7 @@ Chunk:
 {chunk["text"]}
 
 Respond with ONLY this JSON: {{"score": <number between 0 and 1>}}"""
-        scores.append(parse_score(call_gemini(prompt)))
+        scores.append(parse_score(call_llm(prompt)))
     return sum(scores) / len(scores) if scores else 0.0
 
 
@@ -107,7 +86,7 @@ Retrieved context:
 {context}
 
 Respond with ONLY this JSON: {{"score": <number between 0 and 1>}}"""
-    return parse_score(call_gemini(prompt))
+    return parse_score(call_llm(prompt))
 
 
 def evaluate_one(question: str, ground_truth: str, answer: str, chunks: list[dict]) -> dict:
