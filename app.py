@@ -535,9 +535,20 @@ with tab_run:
             )
             progress.progress((i + 1) / len(TEST_CASES))
 
-            chunks = retrieve(collection, case["question"], k=3)
-            answer = generate_answer(case["question"], chunks)
-            scores = evaluate_one(case["question"], case["ground_truth"], answer, chunks)
+            # Caught and displayed rather than allowed to propagate.
+            # Streamlit Cloud redacts the message of an uncaught exception, so
+            # a provider explaining exactly what it refused arrived as "the
+            # original error message is redacted" — leaving a stack trace and
+            # nothing to act on. st.error is not redacted, and the providers
+            # only ever put a status and a response body in these messages,
+            # never a key.
+            try:
+                chunks = retrieve(collection, case["question"], k=3)
+                answer = generate_answer(case["question"], chunks)
+                scores = evaluate_one(case["question"], case["ground_truth"], answer, chunks)
+            except Exception as exc:
+                st.error(f"Stopped at {case['id']}.\n\n{type(exc).__name__}: {exc}")
+                st.stop()
 
             new_results.append({
                 "id":           case["id"],
