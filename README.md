@@ -55,7 +55,7 @@ Faithfulness and recall are near-perfect. Context precision is intentionally low
 - Python — RAG pipeline and evaluation logic
 - Streamlit — dashboard UI
 - ChromaDB — in-memory vector store
-- Mistral (`mistral-small-latest` + `mistral-embed`), Gemini as fallback — embeddings, generation, and the evaluation judge
+- NVIDIA NIM (`llama-3.3-70b` + `nv-embedqa-e5-v5`), Mistral and Gemini as fallbacks — embeddings, generation, and the evaluation judge
 - Plotly — radar chart
 
 ## Run locally

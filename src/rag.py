@@ -26,7 +26,9 @@ def build_index() -> chromadb.Collection:
 
 
 def retrieve(collection: chromadb.Collection, question: str, k: int = 3) -> list[dict]:
-    embedding = embed_text(question)
+    # A question, not a stored chunk. NVIDIA's retriever is trained
+    # asymmetrically and quietly retrieves worse if told the wrong one.
+    embedding = embed_text(question, kind="query")
     results = collection.query(
         query_embeddings=[embedding],
         n_results=k,
