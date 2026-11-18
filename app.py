@@ -538,7 +538,7 @@ with tab_run:
             # Caught and displayed rather than allowed to propagate.
             # Streamlit Cloud redacts the message of an uncaught exception, so
             # a provider explaining exactly what it refused arrived as "the
-            # original error message is redacted" — leaving a stack trace and
+            # original error message is redacted" - leaving a stack trace and
             # nothing to act on. st.error is not redacted, and the providers
             # only ever put a status and a response body in these messages,
             # never a key.

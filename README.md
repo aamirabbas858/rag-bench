@@ -2,7 +2,7 @@
 
 A RAG evaluation dashboard that measures retrieval and generation quality using four metrics inspired by the RAGAS research paper (Es et al., 2023).
 
-Most RAG demos just show that the system can produce an answer. This one measures whether that answer is actually good — and explains where the pipeline is failing.
+Most RAG demos just show that the system can produce an answer. This one measures whether that answer is actually good - and explains where the pipeline is failing.
 
 **Live demo:** [rag-bench-byabbasaamir1.streamlit.app](https://rag-bench-byabbasaamir1.streamlit.app)
 
@@ -17,7 +17,7 @@ Most RAG demos just show that the system can produce an answer. This one measure
 | Context Precision | The proportion of retrieved chunks that were actually useful |
 | Context Recall | All the information needed to answer was present in the retrieved chunks |
 
-Each metric is scored 0 to 1 by an LLM acting as an independent judge, using direct prompts rather than a library. This makes the scoring logic readable and easy to change — and makes it obvious that the judge is a parameter of the experiment, not neutral infrastructure.
+Each metric is scored 0 to 1 by an LLM acting as an independent judge, using direct prompts rather than a library. This makes the scoring logic readable and easy to change - and makes it obvious that the judge is a parameter of the experiment, not neutral infrastructure.
 
 ## Results on the built-in test set
 
@@ -30,7 +30,7 @@ Evaluated on 20 questions across ML and AI fundamentals:
 | Context Precision | 0.367 |
 | Context Recall | 0.980 |
 
-**Judge: `gemini-3.5-flash`, July 2026.** That line is not a footnote — in
+**Judge: `gemini-3.5-flash`, July 2026.** That line is not a footnote - in
 LLM-as-judge evaluation the judge *is* part of the measurement. These four
 numbers are one model's opinion of another model's answers, and running the
 same code against a different judge will produce different numbers on
@@ -40,7 +40,7 @@ and most published RAG numbers do not name one.
 The pipeline now runs on Mistral by default, so re-running will not reproduce
 the table above. That is the point rather than a defect.
 
-Faithfulness and recall are near-perfect. Context precision is intentionally lower — retrieving k=3 chunks when only one is needed is a known retrieval trade-off, and surfacing that number is the point.
+Faithfulness and recall are near-perfect. Context precision is intentionally lower - retrieving k=3 chunks when only one is needed is a known retrieval trade-off, and surfacing that number is the point.
 
 ## How it works
 
@@ -52,11 +52,11 @@ Faithfulness and recall are near-perfect. Context precision is intentionally low
 
 ## Stack
 
-- Python — RAG pipeline and evaluation logic
-- Streamlit — dashboard UI
-- ChromaDB — in-memory vector store
-- NVIDIA NIM (`llama-3.3-70b` + `nv-embedqa-e5-v5`), Mistral and Gemini as fallbacks — embeddings, generation, and the evaluation judge
-- Plotly — radar chart
+- Python - RAG pipeline and evaluation logic
+- Streamlit - dashboard UI
+- ChromaDB - in-memory vector store
+- NVIDIA NIM (`llama-3.3-70b` + `nv-embedqa-e5-v5`), Mistral and Gemini as fallbacks - embeddings, generation, and the evaluation judge
+- Plotly - radar chart
 
 ## Run locally
 
